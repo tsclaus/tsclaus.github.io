@@ -1,9 +1,11 @@
+'use strict';
+
 /*
 	JSON Explorer
 	Published 2015 by Tahsis Claus under MIT Liscense
 */
 
-function() {
+function(){
 	var app = angular.module("t-tools", []);
 
 	app.directive("jsonExplorer", ['$parse',
