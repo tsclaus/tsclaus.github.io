@@ -5,7 +5,7 @@
 	Published 2015 by Tahsis Claus under MIT Liscense
 */
 
-function(){
+(function() {
 	var app = angular.module("t-tools", []);
 
 	app.directive("jsonExplorer", ['$parse',
@@ -14,7 +14,11 @@ function(){
 				restrict: 'A',
 				scope: true,
 				link: function(scope, element, attrs) {
-					scope.json = $parse(scope, attrs.jsonExplorer);
+					scope.$watch(function() {
+						return $parse(attrs.jsonExplorer)(scope.$parent);
+					}, function(newVal) {
+						scope.json = newVal;
+					});
 				}
 			}
 		}
@@ -26,7 +30,13 @@ function(){
 				user: "tsclaus",
 				password: "blah"
 			};
+
+			$scope.testClick = function() {
+				$scope.test = {
+					penis: true
+				}
+			};
 		}
 	]);
 
-}();
+})();
