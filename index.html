@@ -4,17 +4,47 @@
   <head>
     <script data-require="jquery@*" data-semver="2.1.3" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script data-require="angular.js@1.3.15" data-semver="1.3.15" src="https://code.angularjs.org/1.3.15/angular.js"></script>
+    <script src="ng-scrollable-0.1.2/src/ng-scrollable.js"></script>
+    <script src="jquery-scrollbar/jquery.scrollbar.js"></script>
+    <link rel="stylesheet" href="ng-scrollable-0.1.2/assets/ng-scrollable.css" />
+    <link rel="stylesheet" href="jquery-scrollbar/jquery.scrollbar.css" />
     <link rel="stylesheet" href="style.css" />
     <script src="json-explorer.js"></script>
   </head>
 
   <body>
-    <div ng-app="t-tools">
-    	<div ng-controller="exampleCtrl">
-    		<button ng-click="testClick()">test</button>
-    		<div json-explorer="test">{{json}}</div>
-    	</div>
-    </div>
+    <span ng-app="t-tools">
+    	<span ng-controller="exampleCtrl">
+    		<div json-explorer="test" class="explorer">
+          <div class="parent-container explorer-header">
+            <div ng-repeat="node in currentNode.parent.siblings" ng-click="click(node)" class="parent-item" ng-class="node == currentNode.parent ? 'current' : ''">{{node.reference}} {{node.type}} </div>
+            <div ng-if="!currentNode.parent" class="parent-item">Root node is currently selected. Click here to create a wrapping object or array</div>
+          </div>
+          <div class="explorer-body">
+            <div class="sibling-container" ng-scrollable>
+              <div class="sibling-menu">
+                <select ng-model="gui.addSiblingType">
+                  <option value="object">Object</option>
+                  <option value="array">Array</option>
+                  <option value="string">String</option>
+                  <option value="number">Number</option>
+                </select>
+                <input type="text" ng-show="currentNode.parent.type == 'object'" ng-model="gui.addSiblingKey" />
+                <button ng-click="siblingAdd()">Add</button>
+              </div>
+              <div ng-repeat="node in currentNode.siblings" ng-click="click(node)" class="sibling-item" ng-class="node == currentNode ? 'current' : ''">
+                <span>{{node.reference}} {{node.type}}<span>
+              </div>
+            </div>
+            <div class="content-container">
+              <div ng-repeat="node in currentNode.children" ng-click="click(node)" class="child-item">{{node.reference}} {{node.type}} </div>
+              <textarea ng-if="currentNode.type == 'string'" ng-model="currentNode.val"></textarea>
+              <input type="number" ng-if="currentNode.type == 'number'" ng-model="currentNode.val" />
+            </div>
+          </div>
+        </div>
+    	</span>
+    </span>
   </body>
 
 </html>
